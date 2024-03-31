@@ -1,12 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahakobia <ahakobia@student.42.fr>          +#+  +:+       +#+        */
+/*   By: andrej <andrej@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/19 08:19:08 by ahakobia          #+#    #+#             */
-/*   Updated: 2024/03/19 08:22:41 by ahakobia         ###   ########.fr       */
+/*   Created: 2024/03/25 02:08:23 by andrej            #+#    #+#             */
+/*   Updated: 2024/03/25 17:47:46 by andrej           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "fdf.h"
+
+void parsing(char *av, t_pixel pixel)
+{
+	int		fd;
+	char	*line;
+
+	
+	fd = open(av[1], O_RDONLY);
+	if (fd == -1)
+		return (-1);
+	line = get_next_line(fd);
+}

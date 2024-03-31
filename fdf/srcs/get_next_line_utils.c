@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lespenel <lespenel@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: andrej <andrej@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/23 00:40:06 by lespenel          #+#    #+#             */
-/*   Updated: 2023/11/24 23:13:44 by lespenel         ###   ########.fr       */
+/*   Created: 2023/11/23 00:40:06 by ahakobia          #+#    #+#             */
+/*   Updated: 2024/03/25 17:48:32 by andrej           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include <stdlib.h>
+#include <fdf.h>
 
 void	*ft_memcpy(void *dest, const void *src, size_t n);
 char	*ft_strdup(const char *s);
