@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrej <andrej@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ahakobia <ahakobia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 02:17:08 by andrej            #+#    #+#             */
-/*   Updated: 2024/03/25 17:47:37 by andrej           ###   ########.fr       */
+/*   Updated: 2024/04/10 07:59:39 by ahakobia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <fdf.h>
+#include "fdf.h"
+#include <stddef.h>
+#include <stdlib.h>
 
-static size_t	count_words(char const *s, char c)
+size_t	count_words(char const *s, char c)
 {
 	size_t	i;
 	size_t	words;
@@ -21,7 +23,7 @@ static size_t	count_words(char const *s, char c)
 	words = 0;
 	while (s[i])
 	{
-		if (s[i] && s[i] != c)
+		if (s[i] && s[i] != c && s[i])
 		{
 			words++;
 			while (s[i] && (s[i] != c))
@@ -33,7 +35,7 @@ static size_t	count_words(char const *s, char c)
 	return (words);
 }
 
-static size_t	word_len(size_t i, char const *s, char c)
+size_t	word_len(size_t i, char const *s, char c)
 {
 	size_t	len;
 
@@ -46,18 +48,21 @@ static size_t	word_len(size_t i, char const *s, char c)
 	return (len);
 }
 
-static void	*total_free(char **str2d)
+void	*total_free(char **str2d)
 {
 	size_t	i;
 
 	i = 0;
 	while (str2d[i])
-		free(str2d[i++]);
+	{
+		free(str2d[i]);
+		i++;
+	}
 	free(str2d);
 	return (NULL);
 }
 
-static char	**fill_words(char **str2d, size_t words, char const *s, char c)
+char	**fill_words(char **str2d, size_t words, char const *s, char c)
 {
 	size_t	i;	
 	size_t	j;

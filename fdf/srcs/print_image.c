@@ -3,103 +3,88 @@
 /*                                                        :::      ::::::::   */
 /*   print_image.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: andrej <andrej@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ahakobia <ahakobia@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 06:02:51 by ahakobia          #+#    #+#             */
-/*   Updated: 2024/03/29 01:10:20 by andrej           ###   ########.fr       */
+/*   Updated: 2024/04/10 07:56:26 by ahakobia         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	ft_cercle(double x, double y)
+void	draw_line_horizontal(t_pixel *pixel, int y, int x)
 {
-	double	carre_x;
-	double	carre_y;
+	t_line	line;
 
-	carre_x = (x - 960) * (x - 960);
-	carre_y = (y - 540) * (y - 540);
-	if (carre_x + carre_y >= 39900 && carre_x + carre_y <= 40100)
-		return (1);
-	else
-		return (0);
-		
+	line.x0 = pixel->map[y][x].x_p;
+	line.y0 = pixel->map[y][x].y_p;
+	line.x1 = pixel->map[y][x + 1].x_p;
+	line.y1 = pixel->map[y][x + 1].y_p;
+	bresenham(line, pixel);
 }
 
-void	print_window(void *mlx, void *mlx_win, t_pixel pixel)
+void	draw_line_vertical(t_pixel *pixel, int y, int x)
 {
-	t_data	img;
-	int x;
-	int y;
-	// int j;
-	// int i;
+	t_line	line;
 
-	x = 19;
-	// i = 0;
-	y = 11;
-	// j = 800 / 11; 
-	img.img = mlx_new_image(mlx, 1920, 1080);
-	img.addr = mlx_get_data_addr(img.img, 
-			&img.bits_per_pixel, &img.line_length, &img.endian);
-	pixel.y = 200;
-	while (pixel.y <= 800)
-	{
-		pixel.x = 400;
-		while (pixel.x <= 1600)
-		{
-			if ((pixel.y >= ((750 / y) + 200) && pixel.y <= ((850 / y) + 200)) && pixel.y <= 800)
-				my_mlx_pixel_put(&img, pixel.x, pixel.y, 0x0000FFFF);
-			pixel.x += 1;
-		}
-		if (pixel.y >= ((750 / y) + 200) && pixel.y <= ((850 / y) + 200) && pixel.y <= 800 && y != 0)
-			y--;
-		pixel.y += 1;
-	}
-	pixel.x = 400;
-	while (pixel.x <= 1600)
-	{
-		pixel.y = 200;
-		while (pixel.y <= 800)
-		{
-			if ((pixel.x >= ((1550 / x) + 400) && pixel.x <= ((1650 / x) + 400)) && pixel.x <= 1600)
-				my_mlx_pixel_put(&img, pixel.x, pixel.y, 0x00FFFF00);
-			pixel.y += 1;
-		}
-		if (pixel.x >= ((1550 / x) + 400) && pixel.x <= ((1650 / x) + 400) && pixel.x <= 1600 && x != 0)
-			x--;
-		pixel.x += 1;
-	}
-	// while (pixel.y < 800)
-	// {
-	// 	pixel.x = 400;
-	// 	while (pixel.x < 1600)
-	// 	{
-	// 		if (pixel.y >= ((j * i) + 150) && pixel.y <= ((j * i) + 250) && pixel.y < 800)
-	// 			my_mlx_pixel_put(&img, pixel.x, pixel.y, 0x00FFFFFF);
-	// 		pixel.x += 1;
-	// 	}
-	// 	if (pixel.y >= ((750 / y) + 200) && pixel.y <= ((850 / y) + 200) && pixel.y < 800 && i != 10)
-	// 		i++;
-	// 	pixel.y += 1;
-	// }
-	// while (pixel.x < 1920)
-	// {
-	// 	pixel.y = 0;
-	// 	while (pixel.y < 1080)
-	// 	{
-	// 		if (ft_cercle(pixel.x, pixel.y) == 1)
-	// 			my_mlx_pixel_put(&img, pixel.x, pixel.y, 0x00FFFFFF);
-	// 		pixel.y += 0.5;
-	// 	}
-	// 	pixel.x += 0.5;
-	// }
-	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+	line.x0 = pixel->map[y][x].x_p;
+	line.y0 = pixel->map[y][x].y_p;
+	line.x1 = pixel->map[y + 1][x].x_p;
+	line.y1 = pixel->map[y + 1][x].y_p;
+	bresenham(line, pixel);
 }
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+void	draw(t_pixel *pixel)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < pixel->y_max)
+	{
+		x = 0;
+		while (x < pixel->x_max - 1)
+		{
+			draw_line_horizontal(pixel, y, x);
+			x++;
+		}
+		y++;
+	}
+	y = 0;
+	while (y < pixel->y_max - 1)
+	{
+		x = 0;
+		while (x < pixel->x_max)
+		{
+			draw_line_vertical(pixel, y, x);
+			x++;
+		}
+		y++;
+	}
+}
+
+int	print_window(t_pixel *pixel)
+{
+	pixel->img = mlx_new_image(pixel->mlx, 1920, 1080);
+	if (pixel->img == NULL)
+		return (free_before_exit(pixel));
+	pixel->addr = mlx_get_data_addr(pixel->img,
+			&pixel->bits_per_pixel, &pixel->line_length, &pixel->endian);
+	if (pixel->addr == NULL)
+		return (free_before_exit(pixel));
+	apply_projection(pixel);
+	draw(pixel);
+	mlx_put_image_to_window(pixel->mlx, pixel->mlx_win, pixel->img, 0, 0);
+	return (0);
+}
+
+void	my_mlx_pixel_put(t_pixel *pixel, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	if (x < 0 || x > WIDTH || y < 0 || y > HEIGHT)
+		return ;
+	dst = pixel->addr + (y * pixel->line_length
+			+ x * (pixel->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
 }

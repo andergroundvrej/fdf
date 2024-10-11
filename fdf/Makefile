@@ -1,6 +1,18 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: ahakobia <ahakobia@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/04/07 05:03:28 by ahakobia          #+#    #+#              #
+#    Updated: 2024/04/10 04:44:06 by ahakobia         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME = 	fdf
 
-CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES) -I$(MLX_DIR)
+CFLAGS = -Wall -Wextra -Werror -I$(INCLUDES) -I$(MLX_DIR) -g3
 
 EXT_FLAGS = -lX11 -lm -lz -lXext
 
@@ -18,8 +30,13 @@ SRC_FILES = main.c \
 			print_image.c \
 			get_next_line.c \
 			get_next_line_utils.c\
-
-			
+			parsing.c\
+			split.c\
+			utils.c\
+			free.c\
+			bresenham.c\
+			apply_projection.c\
+			check_file.c\
 
 INCLUDES = includes
 
